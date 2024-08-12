@@ -17,8 +17,8 @@ def take_recipe():
 # Main code
 n = int(input("\nHow many recipes would you like to enter? "))
 
-for i in range(n):
-    print(f"\nEntering details for recipe #{i+1}")
+for i in range(1, n+1):
+    print(f"\nEntering details for recipe #{i}")
     recipe = take_recipe()
     for ingredient in recipe['ingredients']:
         if ingredient not in ingredients_list:
@@ -44,9 +44,9 @@ for recipe in recipes_list:
     print(f"Difficulty level: {difficulty}")
     
 # Sort the ingredients list alphabetically
-ingredients_list.sort()
+sorted_ingredients_list = sorted(ingredients_list)
 
 print("\nIngredients Available Across All Recipes")
 print("----------------------------------------")
-for ingredient in ingredients_list:
+for ingredient in sorted_ingredients_list:
     print(ingredient)
