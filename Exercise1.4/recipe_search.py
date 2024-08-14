@@ -14,13 +14,9 @@ def search_ingredient(data):
         print(f"{index} {ingredient}")
     
     try:
-        ingredient_index = int(input("\nSerach for recipes including ingredient#: ")) -1
-        if ingredient_index < 0 or ingredient_index >= len(all_ingredients):
-            raise IndexError("Invalid ingredient number!")
-        
-        else:
-            ingredient_searched = all_ingredients[ingredient_index]
-            print(f"Seraching for: {ingredient_searched}")
+        ingredient_index = int(input("\nSearch for recipes including ingredient#: ")) -1
+        ingredient_searched = all_ingredients[ingredient_index]
+        print(f"Seraching for: {ingredient_searched}")
     
     except ValueError:
         print("Please enter the NUMBER of the ingredient!")

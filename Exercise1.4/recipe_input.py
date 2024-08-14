@@ -41,8 +41,8 @@ except FileNotFoundError:
     print("File not found. Creating a new data structure.")
     data = {'recipes_list': [], 'all_ingredients': []}
 
-except:
-    print("Unexpected error occurred. Creating a new data structure.")
+except Exception as e:
+    print(f"Unexpected error occurred: {e}. Creating a new data structure.")
     data = {'recipes_list': [], 'all_ingredients': []}
 
 else:
