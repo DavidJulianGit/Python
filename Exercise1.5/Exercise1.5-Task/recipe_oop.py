@@ -39,7 +39,6 @@ class Recipe:
         return self.ingredients
     
     def get_difficulty(self):
-
         if self.difficulty == "":
             self.calc_difficulty()
 
@@ -49,17 +48,15 @@ class Recipe:
         for ingredient in ingredients:
             if ingredient not in self.ingredients:
                 self.ingredients.append(ingredient)
-    
+        self.update_all_ingredients()
+
     def search_ingredient(self, ingredient):
-        if ingredient in self.ingredients:
-            return True
-        else:
-            return False
+        return ingredient in self.ingredients
     
     def update_all_ingredients(self):
         for ingredient in self.ingredients:
-            if ingredient not in all_ingredients:
-                all_ingredients.append(ingredient)
+            if ingredient not in Recipe.all_ingredients:
+                Recipe.all_ingredients.append(ingredient)
     
     def __str__(self):
         ingredients_str = ""
@@ -71,7 +68,7 @@ class Recipe:
             f"Recipe: {self.name} \n"
             f"Cooking Time (min): {self.cooking_time} \n"
             f"Ingredients:\n{ingredients_str}"
-            f"Difficulty: {self.difficulty}\n"
+            f"Difficulty: {self.get_difficulty()}\n"
         )
 
         return output
@@ -87,26 +84,24 @@ def recipe_search(data, search_term):
 tea = Recipe("Tea")
 tea.add_ingredients("Tea Leaves", "Sugar", "Water")
 tea.set_cooking_time(5)
-tea.get_difficulty()
 print(tea)
 
 # Instanciate and fill the "Coffee Recipe"
 coffee = Recipe("Coffee")
 coffee.add_ingredients("Coffee Powder", "Sugar", "Water")
 coffee.set_cooking_time(5)
-coffee.get_difficulty()
+
 
 # Instanciate and fill the "Cake Recipe"
 cake = Recipe("Cake")
 cake.add_ingredients("Sugar", "Butter", "Eggs", "Vanilla Essence", "Flour", "Baking Powder", "Milk")
 cake.set_cooking_time(50)
-cake.get_difficulty()
+
 
 # Instanciate and fill the "Banana Smoothie Recipe"
 banana_smoothie = Recipe("Banana Smoothie")
 banana_smoothie.add_ingredients("Bananas", "Milk", "Peanut Butter", "Sugar", "Ice Cubes")
 banana_smoothie.set_cooking_time(5)
-banana_smoothie.get_difficulty()
 
 
 recipes_list = [tea, coffee, cake, banana_smoothie]
