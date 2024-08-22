@@ -159,11 +159,19 @@ def validate_attribute_to_edit(attribute_to_edit_input):
         raise ValueError("Enter the number of the attribute you want to edit. (1-3)")
     return attribute_to_edit_input
 
+def validate_recipe_to_edit_number(recipe_to_edit_number_input, results):
+    if not recipe_to_edit_number_input.isdigit():
+        raise ValueError("Enter a positive integer.")
+                    
+    elif int(recipe_to_edit_number_input) < 1 or int(recipe_to_edit_number_input) > len(results):
+        raise ValueError(f"Enter a number between 1 and {len(results)}.")
+    return recipe_to_edit_number_input
+
 def get_validated_ingredients_str():
     ingredients = []
     while True:
         try: 
-            num_ingredients = get_valid_input("\nHow many ingredients does this recipe contain: ", validate_num_ingredients)
+            num_ingredients = get_valid_input("\nHow many ingredients do you want to enter: ", validate_num_ingredients)
             
             for index in range(num_ingredients):
                 ingredient = get_valid_input(f"Ingredient #{index+1}: ", validate_ingredient)
@@ -189,12 +197,10 @@ def is_table_recipe_empty():
         return False
     except Exception as e:
         print(e)
+
 # 3
 # 3.1
-def create_recipe():
-
-    ingredients = []
-    
+def create_recipe():    
     # 3.1.1 Getting user inputs 
     name = get_valid_input("Recipe name: ", validate_name)
 
@@ -308,30 +314,19 @@ def edit_recipe():
             print(f"\t{index} {recipe[1]}")
 
         # 3.4.4 Let user pick Id
-        while True:
-            try:
-                recipe_to_edit_number_input = input("\nEnter the number of the recipe you want to edit: ").strip()
-                
-                if not recipe_to_edit_number_input.isdigit():
-                    raise ValueError("Enter a positive integer.")
-                    
-                elif int(recipe_to_edit_number_input) < 1 or int(recipe_to_edit_number_input) > len(results):
-                    raise ValueError(f"Enter a number between 1 and {len(results)}.")
-            
-                break
-            except ValueError as e:
-                print(f"Input Error: {e}")
-
+        validate_recipe_to_edit_number_partial = partial(validate_recipe_to_edit_number, results=results)
+        recipe_to_edit_number = get_valid_input("\nNumber of the recipe you want to edit: ", validate_recipe_to_edit_number_partial)         
+               
         # 3.4.5 Retrieve recipe to delete from DB
-        recipe_to_edit_id = results[int(recipe_to_edit_number_input)-1][0]
+        recipe_to_edit_id = results[int(recipe_to_edit_number)-1][0]
         recipe_to_edit = session.query(Recipe).filter(Recipe.id == recipe_to_edit_id).all()[0]
-        print(recipe_to_edit)
+    
 
         # 3.4.6
         output = (
-                    f"1 Recipe: {recipe_to_edit.name} \n"
-                    f"2 Cooking Time (min): {recipe_to_edit.cooking_time} \n"
-                    f"3 Ingredients:{recipe_to_edit.ingredients}"
+                    f" 1 Recipe: {recipe_to_edit.name} \n"
+                    f" 2 Cooking Time (min): {recipe_to_edit.cooking_time} \n"
+                    f" 3 Ingredients:{recipe_to_edit.ingredients}"
         )
         print(output)
 
