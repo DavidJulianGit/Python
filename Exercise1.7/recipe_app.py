@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, Column
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.types import Integer, String
 from sqlalchemy.orm import sessionmaker
+from functools import partial
 
 # Constants
 TABLE_NAME = "final_recipes"
@@ -63,7 +64,7 @@ class Recipe(Base):
     # 2.6
     def calculate_difficulty(self):
         cooking_time = int(self.cooking_time)
-        num_ingredients = len(self.ingredients)
+        num_ingredients = len(self.return_ingredients_as_list())
        
         if cooking_time < 10 and num_ingredients < 4:
             difficulty = "Easy"
@@ -127,10 +128,21 @@ def validate_cooking_time(cooking_time_input):
         raise ValueError("Cooking time must be a positive integer.")
     return cooking_time_input
 
-def validate_search_ingredient(search_ingredients_numbers):
+def validate_search_ingredient(search_ingredients_numbers, all_ingredients):
     if not search_ingredients_numbers:
         raise ValueError("Enter the numbers of all the ingredients you want to search for, seperated by spaces!")
-    return search_ingredients_numbers
+    
+    search_ingredients_list = search_ingredients_numbers.split(" ")
+
+    for index, ingredient in enumerate(search_ingredients_list,start=1):
+        # 3.3.7
+        if not ingredient.isdigit():
+            raise ValueError(f"Enter the number of an ingredient. (1 - {len(all_ingredients)})")
+
+        elif int(ingredient) < 1 or int(ingredient) > len(all_ingredients):
+            raise ValueError(f"Ingredient #{index} that you entered '{ingredient}' does not correspond to an ingredient listed above. (1 - {len(all_ingredients)})")
+
+    return search_ingredients_list
 
 def validate_recipe_to_edit_id(recipe_to_edit_id):
     if not recipe_to_edit_id.isdigit():
@@ -149,21 +161,34 @@ def validate_attribute_to_edit(attribute_to_edit_input):
 
 def get_validated_ingredients_str():
     ingredients = []
-    try: 
-        num_ingredients = get_valid_input("\nHow many ingredients does this recipe contain: ", validate_num_ingredients)
-        
-        for index in range(num_ingredients):
-            ingredient = get_valid_input(f"Ingredient #{index+1}: ", validate_ingredient)
-            if ingredient not in ingredients:
-                ingredients.append(ingredient)
-        
-        # 3.1.4 Convert ingredients into string
-        ingredients_str = ", ".join(ingredients)
-        return ingredients_str
+    while True:
+        try: 
+            num_ingredients = get_valid_input("\nHow many ingredients does this recipe contain: ", validate_num_ingredients)
+            
+            for index in range(num_ingredients):
+                ingredient = get_valid_input(f"Ingredient #{index+1}: ", validate_ingredient)
+                if ingredient not in ingredients:
+                    ingredients.append(ingredient)
+            
+            # 3.1.4 Convert ingredients into string
+            ingredients_str = ", ".join(ingredients)
+            if len(ingredients_str) > 255:
+                raise ValueError("You entered too many characters for your ingredients. (max. 255)")
+            break
+        except ValueError as e:
+            print(e)
+    
+    return ingredients_str
 
-    except ValueError as e:
+def is_table_recipe_empty():
+    try:
+        # 3.5.1 Check if table is empty
+        if not session.query(Recipe).count():
+            print("Sorry, you don't have any recipes to delete yet. Why not create your first one?")
+            return True
+        return False
+    except Exception as e:
         print(e)
-      
 # 3
 # 3.1
 def create_recipe():
@@ -174,14 +199,8 @@ def create_recipe():
     name = get_valid_input("Recipe name: ", validate_name)
 
     # 3.1.3 Get ingredients
-    while True:
-        try:
-            ingredients_str = get_validated_ingredients_str()
-            if len(ingredients_str) > 255:
-                        raise ValueError("You entered too many characters for your ingredients. (max. 255)")
-            break
-        except ValueError as e:    
-            print(e)
+    ingredients_str = get_validated_ingredients_str()
+    
 
     # Get cooking time
     cooking_time = get_valid_input("Cooking time (min): ", validate_cooking_time)
@@ -244,25 +263,16 @@ def search_by_ingredients():
         for index, ingredient in enumerate(all_ingredients, start=1):
             print(f"{index} {ingredient}")
 
-        while True:
-            try:
-            # 3.3.6
-                search_ingredients_numbers = get_valid_input("\nEnter the numbers of all ingredients you want to search for, separated by spaces: ", validate_search_ingredient)
-                search_ingredients_list = search_ingredients_numbers.split(" ")
-                
-                for index, ingredient in enumerate(search_ingredients_list,start=1):
-                    # 3.3.7
-                    if not ingredient.isdigit():
-                        raise ValueError(f"Enter the number of an ingredient.(1 - {len(all_ingredients)})")
+      
+        # 3.3.6
+        # getting all_ingredients into validate_search_ingredient
+        validate_search_ingredient_partial = partial(validate_search_ingredient, all_ingredients=all_ingredients)
+        search_ingredients_list = get_valid_input("\nEnter the numbers of all ingredients you want to search for, separated by spaces: ", validate_search_ingredient_partial)         
 
-                    elif int(ingredient) < 1 or int(ingredient) > len(all_ingredients):
-                        raise ValueError(f"Ingredient #{index} that you entered '{ingredient}' does not correspond to an ingredient listed above. (1 - {len(all_ingredients)})")
-                    
-                    # 3.3.8
-                    search_ingredients.append(all_ingredients[int(ingredient)-1])  
-                break 
-            except ValueError as e:
-                print(f"{e}") 
+        # 3.3.8
+        for ingredient in search_ingredients_list:
+            search_ingredients.append(all_ingredients[int(ingredient)-1])        
+           
 
         ingredients_str = ", ".join(search_ingredients)
         print(f"\nYour search results for '{ingredients_str}':")
@@ -285,14 +295,13 @@ def search_by_ingredients():
 # 3.4
 def edit_recipe():
     try:
+         # 3.4.1 Check if table is empty
+        if is_table_recipe_empty():
+            return
+
         # 3.4.2 Get name and Id of all recipes
         results = session.query(Recipe).with_entities(Recipe.id, Recipe.name).all()
         
-        # 3.4.1 If table is empty, exit the function
-        if not results:
-            print("\nSorry, you don't have any recipes to edit yet. Why not create your first one?")
-            return
-
         # 3.4.3 Display id and name to the user
         print("\nWhich of the following recipes do you want to edit?")
         for index, recipe in enumerate(results, start=1):
@@ -361,8 +370,7 @@ def edit_recipe():
 def delete_recipe():
     try:
         # 3.5.1 Check if table is empty
-        if not session.query(Recipe).count():
-            print("Sorry, you don't have any recipes to delete yet. Why not create your first one?")
+        if is_table_recipe_empty():
             return
 
         # 3.5.2
