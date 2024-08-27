@@ -10,9 +10,7 @@ DEFAULT_APP = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
-CREATED_APP = [
-    "apps.core.apps.CoreConfig",
-]  # custom apps goe here
+CREATED_APP = [] 
 
 THIRD_PARTY_APP = []  # third party apps goe here
 
