@@ -1,5 +1,5 @@
 from django.db import models
-from books.models import Book #to connect sales with books
+from ..books.models import Book #to connect sales with books
 
 # Create your models here.
 
