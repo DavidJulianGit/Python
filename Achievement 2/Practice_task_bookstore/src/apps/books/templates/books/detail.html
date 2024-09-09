@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Details{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 d-flex justify-content-end ">
+            <img src="{{ object.pic.url }}" class="img-fluid rounded shadow" style="object-fit: cover; height: 100%; max-width: 200px;" alt="{{ object.name }}">
+        </div>
+        <div class="col-md-8">
+            <h2 class="display-4">{{ object.name }}</h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Title:</strong> {{ object.name }}</li>
+                <li class="list-group-item"><strong>Author:</strong> {{ object.author_name }}</li>
+                <li class="list-group-item"><strong>Genre:</strong> {{ object.get_genre_display }}</li>
+                <li class="list-group-item"><strong>Book Type:</strong> {{ object.get_book_type_display }}</li>
+                <li class="list-group-item"><strong>Price:</strong> ${{ object.price }}</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

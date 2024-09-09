@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load markdownify %}
+
+{% block title %}{{ recipe.name }}{% endblock %}
+
+{% block content %}
+
+    <div class="row mb-4"> 
+    
+        <div class="col-auto"> 
+            <img src="{{ recipe.image.url }}" class="img-fluid rounded shadow" 
+                 style="object-fit: cover; height: 100%; max-width: 200px;" alt="{{ recipe.name }}">
+        </div>
+      
+        <div class="col ps-3"> 
+            <h2 class="display-4">{{ recipe.name }}</h2>
+            <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+            <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+            <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h3 class="display-6">Directions</h3>
+            <p>{{ recipe.directions|markdownify }}</p>
+        </div>
+    </div>
+
+{% endblock %}

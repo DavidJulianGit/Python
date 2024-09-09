@@ -8,5 +8,7 @@ class Sale(models.Model):
     quantity = models.PositiveIntegerField()
     price = models.FloatField()
     date_created = models.DateTimeField(blank=True)
+    
+
     def __str__(self):
         return f"id: {self.id}, book: {self.book.name}, quantity: {self.quantity}"
