@@ -1,14 +1,3 @@
-from django.shortcuts import render, reverse
-from django.views.generic import ListView, DetailView
-from .models import Book   
+from django.shortcuts import render
 
 # Create your views here.
-class BookListView(ListView):
-    model = Book
-    template_name = 'books/main.html'
-
-class BookDetailView(DetailView):                      
-    model = Book                                       
-    template_name = 'books/detail.html'   
-
- 
