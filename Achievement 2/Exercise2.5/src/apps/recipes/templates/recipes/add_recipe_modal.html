@@ -1,0 +1,43 @@
+<!-- Add Recipe Modal -->
+<div class="modal fade" id="addRecipeModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="addRecipeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addRecipeModalLabel">Add a New Recipe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'recipe:add_recipe' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_name" class="form-label">Recipe Name</label>
+                        <input type="text" class="form-control" id="id_name" name="name" autocomplete="off" placeholder="Enter recipe name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_ingredients" class="form-label">Ingredients</label>
+                        <input type="text" class="form-control" id="id_ingredients" name="ingredients" placeholder="Enter ingredients">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_cooking_time" class="form-label">Cooking Time (in minutes)</label>
+                        <input type="number" class="form-control" id="id_cooking_time" name="cooking_time" placeholder="Enter cooking time">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_directions" class="form-label">Directions</label>
+                        <textarea class="form-control markdown-editor" id="id_directions" name="directions" rows="5" placeholder="Enter directions"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_image" class="form-label">Upload Image</label>
+                        <input type="file" class="form-control" id="id_image" name="image">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Recipe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

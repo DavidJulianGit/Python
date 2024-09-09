@@ -1,0 +1,11 @@
+.add-recipe-btn {
+    width: 50px;      
+    height: 50px;    
+    font-size: 24px;  
+    line-height: 1;   
+    text-align: center;
+    padding: 0;       
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 50%;  
+}
