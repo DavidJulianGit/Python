@@ -1,0 +1,19 @@
+<!-- logout_success.html -->
+{% extends "base.html" %}
+
+{% block title %}Logged Out{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="alert alert-success text-center" role="alert">
+                <h4 class="alert-heading">You’ve successfully logged out.</h4>
+                <p>If you wish to log back in, click the link below:</p>
+                <hr>
+                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
