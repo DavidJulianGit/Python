@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load recipe_filters %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    {% if no_recipes %}
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="alert alert-info">
+                    There are no recipes in the database yet. Please add some recipes to get started.
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <h2 class="display-3 mt-5 mb-4">Recipe of the Day</h2>
+        <div class="row my-4">
+           
+            <div class="col-auto pe-2 d-flex justify-content-start">
+                <a href="{% url 'recipe:recipe_detail' recipe.pk %}" >
+                    <img src="{{ recipe.image.url }}" class="img-fluid rounded shadow"
+                     style="object-fit: cover; height: 100%; max-width: 350px;" alt="{{ recipe.name }}">
+                </a>
+            </div>
+            
+            <div class="col ps-2">
+                <a href="{% url 'recipe:recipe_detail' recipe.pk %}" class="link-underline link-underline-opacity-0">
+                    <h3 class="display-6">{{ recipe.name }}</h3>
+                </a> 
+                <p class="mb-1 "><strong>Ingredients:</strong></p>
+                    <ul class="ms-3">
+                    {% for ingredient in recipe.ingredients|split_ingredients %}
+                        <li >{{ ingredient }}</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+                <p><strong>Difficulty:</strong> 
+                    <button type="button" class="btn {{ recipe.difficulty|style_difficulty }} disabled py-0 px-2">{{ recipe.difficulty }}</button>
+                </p>
+              
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
