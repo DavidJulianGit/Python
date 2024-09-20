@@ -1,0 +1,7 @@
+-r base.txt
+ipython==8.18.1
+django-extensions==3.2.3
+django-markdownify==0.9.5
+django-markdownx==4.0.7
+Markdown==3.7
+matplotlib-inline==0.1.7

@@ -1,0 +1,11 @@
+
+body {
+    overflow-y: scroll; 
+}
+
+.img_aboutme{
+    max-width: 500px;
+    width:100%;
+    
+}
+
