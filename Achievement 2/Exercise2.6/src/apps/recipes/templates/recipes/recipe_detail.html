@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load markdownify %}
+{% load recipe_filters %}
+
+{% block title %}{{ recipe.name }}{% endblock %}
+
+{% block content %}
+
+    <div class="row mt-5 pb-4 border-bottom"> 
+    
+        <div class="col-auto"> 
+            <img src="{{ recipe.image.url }}" class="img-fluid rounded shadow" 
+                 style="object-fit: cover; max-width: 400px;" alt="{{ recipe.name }}">
+        </div>
+      
+        <div class="col ps-3"> 
+            <h2 class="display-4">{{ recipe.name }}</h2>
+            <div class="row">
+                <div class="col-2">
+                    <p class="mb-1 "><strong>Ingredients:</strong></p>
+                </div>
+                <div class="col">
+                    <ul class=" ms-0 px-0">
+                        {% for ingredient in recipe.ingredients|split_ingredients %}
+                            <li class="list-group-item" >{{ ingredient }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <p><strong>Cooking Time:</strong></p>
+                </div>
+                <div class="col">
+                    <p>{{ recipe.cooking_time }} minutes</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <p><strong>Difficulty:</strong> 
+                </div>
+                <div class="col">
+                    <button type="button" class="btn {{ recipe.difficulty|style_difficulty }} disabled py-0 px-1">{{ recipe.difficulty }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pt-3">
+        <div class="col">
+            <h3 class="display-6">Directions</h3>
+            <p>{{ recipe.directions|markdownify }}</p>
+        </div>
+    </div>
+
+{% endblock %}
