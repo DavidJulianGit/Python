@@ -1,15 +1,14 @@
 from django.db import models
-from ckeditor.fields import RichTextField
-from ckeditor_uploader.fields import RichTextUploadingField
+
 
 # Create your models here.
 class Recipe(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=55)
     ingredients = models.CharField(max_length=255)
     cooking_time = models.IntegerField()
     difficulty = models.CharField(max_length=20, editable=False)
     directions = models.TextField(max_length=2000, default="")
-    image = models.ImageField(upload_to='recipe_images', default='no_picture.jpg')
+    image = models.ImageField(upload_to="recipe_images", default="no_picture.jpg")
 
     def save(self, *args, **kwargs):
         self.calculate_difficulty()

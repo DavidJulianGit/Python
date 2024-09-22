@@ -16,7 +16,7 @@ THIRD_PARTY_APP = [
 
 INSTALLED_APPS = INSTALLED_APPS + THIRD_PARTY_APP
 
-#
+
 #DATABASES = {
 #    "default": {
 #        "ENGINE": "django.db.backends.postgresql_psycopg2",
