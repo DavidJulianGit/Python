@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About Me{% endblock %}
+
+{% block content %}
+    <div class="row d-flex flex-row justify-content-center mt-5 pt-5">
+        
+        <div class="col-12 col-md-auto   d-flex flex-column justify-content-center">
+            <img src="{% static 'img/David_square.jpg' %}" class="img-fluid rounded-circle img_aboutme "  alt="picture of david">
+        </div>
+        <div class="col-12 col-md-auto  px-3 d-flex flex-column justify-content-center">
+            <h1 class="display-3 mt-5 mb-4 ps-sm-3">Hi, I'm David</h1>
+            <p class="lead ps-sm-3">
+                I am the developer of this app.<br>
+                Glad you found it and hope you like it.<br>
+            </p>
+            <p class="lead ps-sm-3">
+                If you want to get in touch or just have a look at what else I have built, check out...
+            </p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"> 
+                    <a href="https://davidjuliangit.github.io/Portfolio-Website/" target="_blank" class="link">
+                        <i class="bi bi-briefcase me-1"></i>Portfolio 
+                    </a>
+                </li>
+                <li class="list-group-item"> 
+                    <a href="https://github.com/DavidJulianGit" target="_blank">
+                        <i class="bi bi-github me-1"></i>GitHub
+                    </a>
+                </li>
+                <li class="list-group-item"> 
+                    <a href="https://www.linkedin.com/in/david-schindler-51ab37149/" target="_blank">
+                        <i class="bi bi-linkedin me-1"></i>LinkedIn
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+        
+{% endblock %} 

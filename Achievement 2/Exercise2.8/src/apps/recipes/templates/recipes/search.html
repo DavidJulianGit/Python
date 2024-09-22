@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load recipe_filters %}
+{% block title %}Search{% endblock %}
+
+{% block content %}
+   
+        <h2 class="mt-5 mb-4 display-4">Search Recipes</h2>
+        
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+            
+            <!-- Searching by: -->
+            <div class="col-md-4">
+                <select class="form-select" id="id_searching_by" name="searching_by">
+                    {% for key, value in form.searching_by.field.choices %}
+                        <option value="{{ key }}" {% if key == searching_by %}selected{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <!-- Search Term: -->
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="id_search_term" name="search_term" placeholder="Search for ..." value="{% if search_term %} {{search_term}} {% endif %}">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="bi bi-search me-1"></i>  
+                    </button>
+                </div>
+            </div>
+        </form>
+
+      <!-- Display search results -->
+    
+    {% if results %}
+        <h2 class="display-6 mt-5 mb-4">Search Results</h2>
+        {% for result in results %}
+            <div class="row ms-2 py-3 border-bottom"> 
+                <div class="col-auto"> 
+                    <a href="{% url 'recipe:recipe_detail' result.id %}">
+                        <img src="{{ result.image.url }}" class="img-fluid rounded shadow" 
+                            style="object-fit: cover; height: 100%; max-width: 200px;" alt="{{ result.name }}">
+                    </a>
+                </div>
+
+                <div class="col ps-3"> 
+                    <a href="{% url 'recipe:recipe_detail' result.id %}" class="link-underline link-underline-opacity-0">
+                        <h2 class="display-6">{{ result.name }}</h2>
+                    </a>
+                    <p><strong>Ingredients:</strong> {{ result.ingredients }}</p>
+                    <p><strong>Cooking Time:</strong> {{ result.cooking_time }} minutes</p>
+                    <p><strong>Difficulty:</strong> 
+                        <button type="button" class="btn {{ result.difficulty|style_difficulty }} disabled py-0 px-1">{{ result.difficulty }}</button>
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="my-4 fs-3">No results found.</p>
+    {% endif %}
+
+    <h3 class=" mt-5">DataFrame Table</h3>
+    {{df|safe}}
+  
+{% endblock %}
+
+<!-- Pagination -->
+{% block pagination %}
+    {% include 'recipes/pagination.html' with page_obj=page_obj %}
+{% endblock %}
